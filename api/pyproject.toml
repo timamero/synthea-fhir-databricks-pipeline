@@ -6,9 +6,10 @@ authors = [
     {name = "Fatima Anne Camero",email = "54559570+timamero@users.noreply.github.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14,<4.0.0"
 dependencies = [
-    "fastapi[standard] (>=0.139.2,<0.140.0)"
+    "fastapi[standard] (>=0.139.2,<0.140.0)",
+    "databricks-sql-connector (>=4.3.0,<5.0.0)",
 ]
 
 [tool.poetry]
