@@ -17,4 +17,3 @@ def get_condition_counts():
         ),
     ]
     return sample_data
-
