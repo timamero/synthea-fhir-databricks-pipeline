@@ -10,6 +10,7 @@ requires-python = ">=3.14,<4.0.0"
 dependencies = [
     "fastapi[standard] (>=0.139.2,<0.140.0)",
     "databricks-sql-connector (>=4.3.0,<5.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)",
 ]
 
 [tool.poetry]
