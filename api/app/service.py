@@ -15,16 +15,18 @@ def get_condition_counts():
   GROUP BY p.gender, c.condition_description
   ORDER BY condition_count DESC LIMIT 5;
   """
+    try:
+        with sql.connect(
+            server_hostname=os.getenv("DATABRICKS_SERVER_HOSTNAME"),
+            http_path=os.getenv("DATABRICKS_HTTP_PATH"),
+            access_token=os.getenv("DATABRICKS_TOKEN"),
+        ) as connection:
 
-    with sql.connect(
-        server_hostname=os.getenv("DATABRICKS_SERVER_HOSTNAME"),
-        http_path=os.getenv("DATABRICKS_HTTP_PATH"),
-        access_token=os.getenv("DATABRICKS_TOKEN"),
-    ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
 
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            result = cursor.fetchall()
-
-            for row in result:
-                print(row)
+                for row in result:
+                    print(row)
+    except Exception as e:
+        print(f"Error executing query: {e}")
