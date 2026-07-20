@@ -1,7 +1,14 @@
+import '@mantine/core/styles.css';
+
+import { MantineProvider } from '@mantine/core';
+import { Title } from '@mantine/core';
+
 export default function App() {
   return (
-    <div>
-      <h1>Synthea FHIR Pipeline</h1>
-    </div>
+    <MantineProvider>
+      <div>
+        <Title>Synthea FHIR Pipeline</Title>
+      </div>
+    </MantineProvider>
   );
 }
