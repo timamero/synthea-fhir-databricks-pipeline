@@ -32,3 +32,10 @@ export function sortPivotedConditionCountsByGender(
       (b.male ?? 0) + (b.female ?? 0) - ((a.male ?? 0) + (a.female ?? 0)),
   );
 }
+
+export function limitTopNConditions(
+  data: PivotedConditionCounts[],
+  n: number,
+): PivotedConditionCounts[] {
+  return data.slice(0, n);
+}

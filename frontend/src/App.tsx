@@ -11,7 +11,10 @@ import { type PivotedConditionCounts } from './utils/types';
 import {
   pivotByCondition,
   sortPivotedConditionCountsByGender,
+  limitTopNConditions,
 } from './utils/transforms';
+
+const LIMIT_TOP_N_CONDITIONS = 10;
 
 export default function App() {
   const [conditionCounts, setConditionCounts] = useState<
@@ -25,8 +28,9 @@ export default function App() {
       const data = await fetchConditionCounts(baseUrl);
 
       if (data) {
-        const transformedData = sortPivotedConditionCountsByGender(
-          pivotByCondition(data),
+        const transformedData = limitTopNConditions(
+          sortPivotedConditionCountsByGender(pivotByCondition(data)),
+          LIMIT_TOP_N_CONDITIONS,
         );
         setConditionCounts(transformedData);
       } else {
