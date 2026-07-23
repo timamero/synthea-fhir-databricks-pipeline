@@ -7,7 +7,7 @@ router = APIRouter(prefix="/api")
 
 
 @router.get("/condition_counts", response_model=list[ConditionCount])
-def read_condition_counts():
+def read_condition_counts(limit: int = 20):
     """
     Endpoint to fetch the count of conditions grouped by gender and condition
     description from the Databricks SQL database.
@@ -15,7 +15,7 @@ def read_condition_counts():
         List[ConditionCount]: A list of ConditionCount objects containing the gender,
         condition description, and the count of each condition.
     """
-    condition_counts = get_condition_counts()
+    condition_counts = get_condition_counts(limit=limit)
 
     if condition_counts is None:
         raise HTTPException(

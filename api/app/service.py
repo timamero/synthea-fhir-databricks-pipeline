@@ -10,7 +10,7 @@ import os
 from .schema import ConditionCount
 
 
-def get_condition_counts():
+def get_condition_counts(limit: int) -> List[ConditionCount]:
     """
     Fetches the count of conditions grouped by gender and condition description from
     the Databricks SQL database.
@@ -18,12 +18,12 @@ def get_condition_counts():
         List[ConditionCount]: A list of ConditionCount objects containing the gender,
         condition description, and the count of each condition.
     """
-    query = """
+    query = f"""
     SELECT p.gender, c.condition_description, COUNT(*) AS condition_count
     FROM learning.synthea.conditions c
     JOIN learning.synthea.patients p ON c.patient_id = p.patient_id
     GROUP BY p.gender, c.condition_description
-    ORDER BY condition_count DESC LIMIT 20;
+    ORDER BY condition_count DESC LIMIT {limit};
     """
     try:
         formatted_data: List[ConditionCount] = []
