@@ -18,22 +18,32 @@ import { APP_CONFIG } from '../config';
  * A card component that displays a bar chart of the top conditions by gender.
  */
 export default function ConditionsCountChartCard() {
+  const [status, setStatus] = useState<'loading' | 'error' | 'success'>(
+    'loading',
+  );
   const [conditionCounts, setConditionCounts] = useState<
     PivotedConditionCount[] | null
   >(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchConditionCounts(APP_CONFIG.API_BASE_URL);
+      try {
+        const data = await fetchConditionCounts(APP_CONFIG.API_BASE_URL);
 
-      if (data) {
-        const transformedData = limitTopNConditions(
-          sortByTotalCount(pivotByCondition(data)),
-          APP_CONFIG.LIMIT_TOP_N_CONDITIONS,
-        );
-        setConditionCounts(transformedData);
-      } else {
-        console.warn('No condition counts data received from the API.');
+        if (data) {
+          setStatus('success');
+          const transformedData = limitTopNConditions(
+            sortByTotalCount(pivotByCondition(data)),
+            APP_CONFIG.LIMIT_TOP_N_CONDITIONS,
+          );
+          setConditionCounts(transformedData);
+        } else {
+          setStatus('error');
+          console.warn('No condition counts data received from the API.');
+        }
+      } catch (error) {
+        setStatus('error');
+        console.error('Error fetching condition counts:', error);
       }
     };
 
@@ -52,7 +62,7 @@ export default function ConditionsCountChartCard() {
       </Stack>
 
       <Stack justify="center" align="center" mb="xs">
-        {conditionCounts ? (
+        {conditionCounts && (
           <BarChart
             data={conditionCounts}
             dataKey="condition_description"
@@ -72,13 +82,19 @@ export default function ConditionsCountChartCard() {
             barProps={{ radius: 8 }}
             barChartProps={{ barCategoryGap: 12 }}
           />
-        ) : (
+        )}
+        {status === 'loading' && (
           <Loader
             size="xl"
             type="dots"
             color="blue"
             style={{ marginTop: '20px' }}
           />
+        )}
+        {status === 'error' && (
+          <Text c="red" mt="md" fw={600}>
+            Error fetching condition counts. Please try again later.
+          </Text>
         )}
       </Stack>
     </Card>
